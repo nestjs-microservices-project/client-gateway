@@ -1,5 +1,5 @@
 # Dependencias
-FROM node:21-alpine3.19 as deps
+FROM node:23-alpine3.20 AS deps
 
 WORKDIR /usr/src/app
 
@@ -9,10 +9,8 @@ COPY package-lock.json ./
 RUN npm install
 
 
-
-
 # Builder - Construye la aplicación
-FROM node:21-alpine3.19 as build
+FROM node:23-alpine3.20 AS build
 
 WORKDIR /usr/src/app
 
@@ -28,24 +26,20 @@ RUN npm run build
 RUN npm ci -f --only=production && npm cache clean --force
 
 
-
 # Crear la imagen final de Docker
-FROM node:21-alpine3.19 as prod
+FROM node:23-alpine3.20 AS prod
 
 WORKDIR /usr/src/app
-
 
 COPY --from=build /usr/src/app/node_modules ./node_modules
 
 # Copiar la carpeta de DIST
 COPY --from=build /usr/src/app/dist ./dist
 
-
 ENV NODE_ENV=production
 
 USER node
 
-
-EXPOSE 3000
+EXPOSE 3100
 
 CMD [ "node", "dist/main.js" ]
