@@ -28,7 +28,7 @@ async function bootstrap() {
 
   await app.listen(envs.port);
 
-  logger.log('Health check configured');
+  logger.log('Health check configured successfully');
 
   logger.log(`Gateway running on port ${envs.port}`);
 }
